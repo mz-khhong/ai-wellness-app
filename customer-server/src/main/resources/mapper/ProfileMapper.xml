@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aiwellness.customer.adapter.persistence.profile.ProfileMapper">
+    
+    <resultMap id="ProfileResultMap" type="com.aiwellness.customer.domain.model.profile.Profile">
+        <id property="id" column="id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="profileImageUrl" column="profile_image_url"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="com.aiwellness.customer.domain.model.profile.Profile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO profiles (
+            customer_id,
+            nickname,
+            profile_image_url,
+            created_at,
+            updated_at
+        ) VALUES (
+            #{customerId},
+            #{nickname},
+            #{profileImageUrl},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+    
+    <update id="update" parameterType="com.aiwellness.customer.domain.model.profile.Profile">
+        UPDATE profiles
+        SET
+            customer_id = #{customerId},
+            nickname = #{nickname},
+            profile_image_url = #{profileImageUrl},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+    
+    <select id="findById" parameterType="long" resultMap="ProfileResultMap">
+        SELECT
+            id,
+            customer_id,
+            nickname,
+            profile_image_url,
+            created_at,
+            updated_at
+        FROM profiles
+        WHERE id = #{id}
+    </select>
+    
+    <select id="findByCustomerId" parameterType="long" resultMap="ProfileResultMap">
+        SELECT
+            id,
+            customer_id,
+            nickname,
+            profile_image_url,
+            created_at,
+            updated_at
+        FROM profiles
+        WHERE customer_id = #{customerId}
+    </select>
+    
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM profiles
+        WHERE id = #{id}
+    </delete>
+    
+</mapper>
+

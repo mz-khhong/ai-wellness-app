@@ -1,0 +1,31 @@
+# 스테이징 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: stg
+  
+  # 로깅 레벨
+  logging:
+    level:
+      root: INFO
+      com.aiwellness: INFO
+      org.springframework.web: INFO
+  
+  # 데이터베이스 설정 (스테이징 환경: PostgreSQL)
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:stg-db.example.com}:${DB_PORT:5432}/${DB_NAME:aiwellnessdb}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:aiuser}
+    password: ${DB_PASSWORD:mzaiuser@@}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+# JWT 설정
+jwt:
+  secret: ${JWT_SECRET:ai-wellness-app-secret-key-for-jwt-token-generation-minimum-256-bits-stg}
+  expiration: ${JWT_EXPIRATION:86400000}
+

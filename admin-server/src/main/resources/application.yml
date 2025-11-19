@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: admin-server
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}  # 기본값: dev, 환경 변수로 변경 가능
+  config:
+    import:
+      - classpath:application-common.yml
+  datasource:
+    # PostgreSQL 설정
+    url: jdbc:postgresql://localhost:5432/aiwellnessdb
+    driver-class-name: org.postgresql.Driver
+    username: aiuser
+    password: mzaiuser@@
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.aiwellness: DEBUG
+    org.springframework.web: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+

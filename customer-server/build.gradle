@@ -1,0 +1,20 @@
+dependencies {
+    // Common 모듈 의존성
+    implementation project(':common')
+    
+    // Customer Server specific dependencies
+}
+
+// Common 모듈의 리소스 파일을 빌드 시 복사
+// 주의: 서버별 메시지 파일이 먼저 복사되어야 하므로, common 모듈의 메시지 파일은 나중에 복사합니다.
+// 이렇게 하면 서버별 메시지 파일이 common 모듈의 메시지 파일을 덮어쓰지 않습니다.
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE  // 중복 파일은 첫 번째 파일만 유지 (서버별 메시지 파일 우선)
+    from(project(':common').sourceSets.main.resources) {
+        include 'application-common.yml'
+        // 메시지 파일은 제외 (서버별 메시지 파일만 사용)
+        // include 'messages/message.properties'
+        // include 'messages/message_*.properties'
+    }
+}
+

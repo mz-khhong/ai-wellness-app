@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aiwellness.admin.adapter.persistence.mybody.MyBodyMapper">
+    
+    <resultMap id="MyBodyResultMap" type="com.aiwellness.admin.domain.model.mybody.MyBody">
+        <id property="id" column="id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="facilityGroupId" column="facility_group_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="com.aiwellness.admin.domain.model.mybody.MyBody" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO my_bodies (
+            customer_id,
+            facility_group_id,
+            created_at,
+            updated_at
+        ) VALUES (
+            #{customerId},
+            #{facilityGroupId},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+    
+    <update id="update" parameterType="com.aiwellness.admin.domain.model.mybody.MyBody">
+        UPDATE my_bodies
+        SET
+            customer_id = #{customerId},
+            facility_group_id = #{facilityGroupId},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+    
+    <select id="findById" parameterType="long" resultMap="MyBodyResultMap">
+        SELECT
+            id,
+            customer_id,
+            facility_group_id,
+            created_at,
+            updated_at
+        FROM my_bodies
+        WHERE id = #{id}
+    </select>
+    
+    <select id="findByCustomerId" parameterType="long" resultMap="MyBodyResultMap">
+        SELECT
+            id,
+            customer_id,
+            facility_group_id,
+            created_at,
+            updated_at
+        FROM my_bodies
+        WHERE customer_id = #{customerId}
+    </select>
+    
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM my_bodies
+        WHERE id = #{id}
+    </delete>
+    
+</mapper>
+

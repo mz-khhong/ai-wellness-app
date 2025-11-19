@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aiwellness.customer.adapter.persistence.customer.CustomerMapper">
+
+    <resultMap id="customerResultMap" type="com.aiwellness.customer.domain.model.customer.Customer">
+        <id property="id" column="id"/>
+        <result property="facilityGroupId" column="facility_group_id"/>
+        <result property="uuid" column="uuid"/>
+        <result property="email" column="email"/>
+        <result property="name" column="name"/>
+        <result property="password" column="password"/>
+        <result property="status" column="status"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- INSERT: 새 엔티티 생성 -->
+    <insert id="insert" parameterType="com.aiwellness.customer.domain.model.customer.Customer" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO customers (facility_group_id, uuid, email, name, password, status, created_at, updated_at)
+        VALUES (#{facilityGroupId}, #{uuid}, #{email}, #{name}, #{password}, #{status}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <!-- UPDATE: 기존 엔티티 수정 -->
+    <update id="update" parameterType="com.aiwellness.customer.domain.model.customer.Customer">
+        UPDATE customers
+        SET facility_group_id = #{facilityGroupId},
+            email = #{email},
+            name = #{name},
+            password = #{password},
+            status = #{status},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findById" parameterType="long" resultMap="customerResultMap">
+        SELECT id, facility_group_id, uuid, email, name, password, status, created_at, updated_at
+        FROM customers
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByEmail" parameterType="string" resultMap="customerResultMap">
+        SELECT id, facility_group_id, uuid, email, name, password, status, created_at, updated_at
+        FROM customers
+        WHERE email = #{email}
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM customers
+        WHERE id = #{id}
+    </delete>
+
+</mapper>
+

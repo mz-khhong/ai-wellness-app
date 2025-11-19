@@ -1,0 +1,20 @@
+# PostgreSQL 공통 설정
+# 주의: 실제 접속 정보(url, username, password)는 환경별 profile 파일에서 관리합니다.
+# - 개발 환경: application-dev.yml
+# - 스테이징 환경: application-stg.yml
+# - 운영 환경: application-prod.yml
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      # 개발 환경 기본값 (환경별로 오버라이드 가능)
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+      # 여러 시스템에서 하나의 통합 DB를 사용하는 경우를 위한 트랜잭션 격리 수준 설정
+      # 새 연결을 풀에서 가져올 때만 실행되므로 성능 영향 최소화 (연결 재사용 시 실행되지 않음)
+      # READ_COMMITTED 격리 수준으로 설정하여 여러 시스템 간 동시성 제어
+      connection-init-sql: "SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED"

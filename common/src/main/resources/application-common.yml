@@ -1,0 +1,42 @@
+# Common 모듈 설정
+jwt:
+  secret: ai-wellness-app-secret-key-for-jwt-token-generation-minimum-256-bits-required-for-hmac-sha-algorithm
+  expiration: 86400000 # 24 hours
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.aiwellness.**.domain.model
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+    # MyBatis 로깅 설정
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    # 쿼리 추적을 위한 설정
+    cache-enabled: true
+    lazy-loading-enabled: false
+    aggressive-lazy-loading: false
+
+# Swagger/OpenAPI 설정
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+    try-it-out-enabled: true
+    filter: true
+  # group-configs는 SwaggerConfig.java의 GroupedOpenApi 빈으로 관리
+
+# 로깅 설정
+logging:
+  level:
+    com.aiwellness.common.persistence.interceptor.MyBatisQueryInterceptor: INFO
+    org.apache.ibatis: DEBUG
+    java.sql: DEBUG
+    java.sql.Statement: DEBUG
+    java.sql.PreparedStatement: DEBUG
+    java.sql.ResultSet: DEBUG

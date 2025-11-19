@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aiwellness.customer.adapter.persistence.category.CategoryMapper">
+
+    <resultMap id="categoryResultMap" type="com.aiwellness.customer.domain.category.model.Category">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="displayOrder" column="display_order"/>
+        <result property="isActive" column="is_active"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.aiwellness.customer.domain.category.model.Category" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO categories (name, description, display_order, is_active)
+        VALUES (#{name}, #{description}, #{displayOrder}, #{isActive})
+        ON CONFLICT (id) DO UPDATE SET
+            name = EXCLUDED.name,
+            description = EXCLUDED.description,
+            display_order = EXCLUDED.display_order,
+            is_active = EXCLUDED.is_active
+    </insert>
+
+    <select id="findById" parameterType="long" resultMap="categoryResultMap">
+        SELECT id, name, description, display_order, is_active
+        FROM categories
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByName" parameterType="string" resultMap="categoryResultMap">
+        SELECT id, name, description, display_order, is_active
+        FROM categories
+        WHERE name = #{name}
+    </select>
+
+    <select id="findAll" resultMap="categoryResultMap">
+        SELECT id, name, description, display_order, is_active
+        FROM categories
+        ORDER BY display_order ASC, id ASC
+    </select>
+
+    <select id="findAllActive" resultMap="categoryResultMap">
+        SELECT id, name, description, display_order, is_active
+        FROM categories
+        WHERE is_active = true
+        ORDER BY display_order ASC, id ASC
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM categories
+        WHERE id = #{id}
+    </delete>
+
+</mapper>
+
