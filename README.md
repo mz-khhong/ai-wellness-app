@@ -82,20 +82,9 @@ brew services start postgresql@15
 
 ### 주요 가이드 문서
 
-- **[01_QUICK_START.md](./developer-guide/01_QUICK_START.md)**: 빠른 시작 가이드
-- **[02_POSTGRESQL_SETUP.md](./developer-guide/02_POSTGRESQL_SETUP.md)**: PostgreSQL 설치 및 설정
-- **[03_ARCHITECTURE.md](./developer-guide/03_ARCHITECTURE.md)**: 아키텍처 구조 설명
-- **[04_USAGE_GUIDE.md](./developer-guide/04_USAGE_GUIDE.md)**: 사용 가이드
-- **[05_SWAGGER_GUIDE.md](./developer-guide/05_SWAGGER_GUIDE.md)**: Swagger UI 사용 가이드
-- **[06_MULTI_DOMAIN_GUIDE.md](./developer-guide/06_MULTI_DOMAIN_GUIDE.md)**: 멀티 도메인 작업 가이드
-- **[07_DOMAIN_MODEL_GUIDE.md](./developer-guide/07_DOMAIN_MODEL_GUIDE.md)**: Domain Model 구조 가이드
-- **[10_I18N_GUIDE.md](./developer-guide/10_I18N_GUIDE.md)**: 다국어 처리 가이드
-- **[12_EVENT_DRIVEN_GUIDE.md](./developer-guide/12_EVENT_DRIVEN_GUIDE.md)**: Event-Driven Architecture 가이드
-- **[13_HEXAGONAL_ARCHITECTURE_GUIDE.md](./developer-guide/13_HEXAGONAL_ARCHITECTURE_GUIDE.md)**: 헥사고날 아키텍처 실전 가이드
-- **[14_RBAC_GUIDE.md](./developer-guide/14_RBAC_GUIDE.md)**: Role-Based Access Control 가이드
-- **[15_APPLICATION_RUN_GUIDE.md](./developer-guide/15_APPLICATION_RUN_GUIDE.md)**: 애플리케이션 실행 가이드
-
-자세한 목록은 [developer-guide/README.md](./developer-guide/README.md)를 참조하세요.
+- **[01_시작하기.md](./developer-guide/01_시작하기.md)**: 빠른 시작 가이드
+- **[02_아키텍처_개발가이드.md](./developer-guide/02_아키텍처_개발가이드.md)**: 아키텍처 구조 및 개발 가이드
+- **[03_테스트_외부연동.md](./developer-guide/03_테스트_외부연동.md)**: 테스트 및 외부 연동 가이드
 
 ## API 엔드포인트
 
