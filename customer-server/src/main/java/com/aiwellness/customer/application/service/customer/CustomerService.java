@@ -1,8 +1,8 @@
 package com.aiwellness.customer.application.service.customer;
 
-import com.aiwellness.customer.adapter.web.customer.dto.CustomerCreateRequest;
-import com.aiwellness.customer.adapter.web.customer.dto.CustomerResponse;
-import com.aiwellness.customer.adapter.web.customer.dto.CustomerUpdateRequest;
+import com.aiwellness.customer.adapter.web.customer.dto.request.CustomerCreateRequest;
+import com.aiwellness.customer.adapter.web.customer.dto.request.CustomerUpdateRequest;
+import com.aiwellness.customer.adapter.web.customer.dto.response.CustomerResponse;
 import com.aiwellness.customer.domain.model.customer.Customer;
 import com.aiwellness.customer.domain.model.enums.CustomerStatus;
 import com.aiwellness.customer.domain.port.customer.CustomerRepositoryPort;

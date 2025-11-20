@@ -2,6 +2,7 @@ package com.aiwellness.admin.adapter.security;
 
 import com.aiwellness.admin.domain.model.admin.Admin;
 import com.aiwellness.admin.domain.model.enums.AdminRole;
+import com.aiwellness.admin.domain.model.enums.AdminStatus;
 import com.aiwellness.admin.domain.port.admin.AdminRepositoryPort;
 import com.aiwellness.common.code.ApiResponseWellnessCode;
 import com.aiwellness.common.security.AuthenticationException;
@@ -14,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * com.aiwellness.admin.adapter.security
@@ -52,14 +52,13 @@ public class AdminAuthenticationAdapter implements AuthenticationPort {
         
         // 비밀번호 검증
         if (!passwordEncoder.matches(password, admin.getPassword())) {
-            log.warn("[Adapter/Security] AdminAuthenticationAdapter.authenticate() - 비밀번호 불일치: email={}", email);
             throw new AuthenticationException(
                     ApiResponseWellnessCode.AUTH_PASSWORD_MISMATCH,
                     ApiResponseWellnessCode.AUTH_PASSWORD_MISMATCH.getMessageKey());
         }
         
         // 상태 검증 (활성화된 사용자만 로그인 가능)
-        if (admin.getStatus() != com.aiwellness.admin.domain.model.enums.AdminStatus.ACTIVE) {
+        if (admin.getStatus() != AdminStatus.ACTIVE) {
             log.warn("[Adapter/Security] AdminAuthenticationAdapter.authenticate() - 비활성화된 사용자: email={}, status={}", 
                     email, admin.getStatus());
             throw new AuthenticationException(
@@ -70,8 +69,7 @@ public class AdminAuthenticationAdapter implements AuthenticationPort {
         // 역할 변환 (기본적으로 ADMIN 역할 사용)
         List<String> roles = List.of(AdminRole.ADMIN.getValue());
         
-        log.info("[Adapter/Security] AdminAuthenticationAdapter.authenticate() - 인증 성공: userId={}, email={}", 
-                admin.getId(), email);
+        log.debug("[Adapter/Security] AdminAuthenticationAdapter.authenticate() - 인증 성공: userId={}, email={}", admin.getId(), email);
         
         return AuthenticationResult.builder()
                 .userId(admin.getId())

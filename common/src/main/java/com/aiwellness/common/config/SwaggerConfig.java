@@ -8,14 +8,16 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * com.aiwellness.common.config
@@ -34,34 +36,56 @@ import java.util.List;
  *  2025. 11. 14.    메가존 시스템            최초 생성
  * </pre>
  */
+@Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class SwaggerConfig {
     
     @Value("${spring.application.name:wellness-app}")
     private String applicationName;
     
-    @Value("${server.port:8080}")
-    private int serverPort;
+    private final SwaggerPathConfig swaggerPathConfig;
+    private final SwaggerInfoConfig swaggerInfoConfig;
     
     @Bean
     public OpenAPI openAPI() {
         String securitySchemeName = "bearerAuth";
         
-        String title = getServerTitle();
-        String description = getServerDescription();
-        List<Server> servers = getServerList();
+        // 설정 파일에서 Swagger 정보 읽기
+        Info info = new Info()
+                .title(swaggerInfoConfig.getTitle())
+                .description(swaggerInfoConfig.getDescription())
+                .version(swaggerInfoConfig.getVersion());
+        
+        // Contact 정보 설정
+        if (swaggerInfoConfig.getContact() != null) {
+            SwaggerInfoConfig.Contact contact = swaggerInfoConfig.getContact();
+            if (contact.getName() != null || contact.getEmail() != null) {
+                info.contact(new Contact()
+                        .name(contact.getName())
+                        .email(contact.getEmail()));
+            }
+        }
+        
+        // License 정보 설정
+        if (swaggerInfoConfig.getLicense() != null) {
+            SwaggerInfoConfig.License license = swaggerInfoConfig.getLicense();
+            if (license.getName() != null || license.getUrl() != null) {
+                info.license(new License()
+                        .name(license.getName())
+                        .url(license.getUrl()));
+            }
+        }
+        
+        // Server 정보 설정
+        List<Server> servers = swaggerInfoConfig.getServers().stream()
+                .map(server -> new Server()
+                        .url(server.getUrl())
+                        .description(server.getDescription()))
+                .collect(Collectors.toList());
         
         return new OpenAPI()
-                .info(new Info()
-                        .title(title)
-                        .description(description)
-                        .version("1.0.0")
-                        .contact(new Contact()
-                                .name("Wellness App Team")
-                                .email("dev@wellness.com"))
-                        .license(new License()
-                                .name("Apache 2.0")
-                                .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
+                .info(info)
                 .servers(servers)
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
@@ -77,10 +101,17 @@ public class SwaggerConfig {
     @Bean
     @ConditionalOnProperty(name = "spring.application.name", havingValue = "admin-server")
     public GroupedOpenApi adminApis() {
+        String[] apiPaths = swaggerPathConfig.getApiPathArray();
+        // 디버깅: 로드된 경로 확인
+        log.info("[SwaggerConfig] Admin API paths configured: {}", java.util.Arrays.toString(apiPaths));
         return GroupedOpenApi.builder()
-                .group("default")
+                .group("admin-server")
                 .displayName("Admin APIs")
-                .pathsToMatch("/api/v1/auth/**", "/api/v1/admins/**", "/api/v1/response-codes/**")
+                .pathsToMatch(apiPaths)
+                .packagesToScan(
+                    "com.aiwellness.common.controller",  // common 모듈의 공통 API (Auth, AppCode 등)
+                    "com.aiwellness.admin.adapter.web"  // admin-server의 web 패키지 스캔
+                )
                 .build();
     }
     
@@ -88,9 +119,13 @@ public class SwaggerConfig {
     @ConditionalOnProperty(name = "spring.application.name", havingValue = "manager-server")
     public GroupedOpenApi managerApis() {
         return GroupedOpenApi.builder()
-                .group("default")
+                .group("manager-server")
                 .displayName("Manager APIs")
-                .pathsToMatch("/api/v1/auth/**", "/api/v1/managers/**", "/api/v1/response-codes/**")
+                .pathsToMatch(swaggerPathConfig.getApiPathArray())
+                .packagesToScan(
+                    "com.aiwellness.common.controller",  // common 모듈의 공통 API (Auth, AppCode 등)
+                    "com.aiwellness.manager.adapter.web"  // manager-server의 web 패키지 스캔
+                )
                 .build();
     }
     
@@ -98,49 +133,14 @@ public class SwaggerConfig {
     @ConditionalOnProperty(name = "spring.application.name", havingValue = "customer-server")
     public GroupedOpenApi customerApis() {
         return GroupedOpenApi.builder()
-                .group("default")
+                .group("customer-server")
                 .displayName("Customer APIs")
-                .pathsToMatch("/api/v1/auth/**", "/api/v1/customers/**", "/api/v1/response-codes/**")
+                .pathsToMatch(swaggerPathConfig.getApiPathArray())
+                .packagesToScan(
+                    "com.aiwellness.common.controller",  // common 모듈의 공통 API (Auth, AppCode 등)
+                    "com.aiwellness.customer.adapter.web"  // customer-server의 web 패키지 스캔
+                )
                 .build();
-    }
-    
-    private String getServerTitle() {
-        return switch (applicationName) {
-            case "admin-server" -> "Admin Server API Documentation";
-            case "manager-server" -> "Manager Server API Documentation";
-            case "customer-server" -> "Customer Server API Documentation";
-            default -> "Wellness App API Documentation";
-        };
-    }
-    
-    private String getServerDescription() {
-        return switch (applicationName) {
-            case "admin-server" -> "Admin Server의 API 문서입니다.";
-            case "manager-server" -> "Manager Server의 API 문서입니다.";
-            case "customer-server" -> "Customer Server의 API 문서입니다.";
-            default -> "Wellness App의 통합 API 문서입니다.";
-        };
-    }
-    
-    private List<Server> getServerList() {
-        List<Server> servers = new ArrayList<>();
-        
-        switch (applicationName) {
-            case "admin-server":
-                servers.add(new Server().url("http://localhost:8080").description("Admin Server"));
-                break;
-            case "manager-server":
-                servers.add(new Server().url("http://localhost:8081").description("Manager Server"));
-                break;
-            case "customer-server":
-                servers.add(new Server().url("http://localhost:8082").description("Customer Server"));
-                break;
-            default:
-                servers.add(new Server().url("http://localhost:8080").description("Admin Server"));
-                servers.add(new Server().url("http://localhost:8081").description("Manager Server"));
-                servers.add(new Server().url("http://localhost:8082").description("Customer Server"));
-        }
-        return servers;
     }
 }
 

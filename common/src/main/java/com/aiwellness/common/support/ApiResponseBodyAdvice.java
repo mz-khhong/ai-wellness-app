@@ -96,6 +96,17 @@ public class ApiResponseBodyAdvice implements ResponseBodyAdvice<ApiResponseWell
     
     /**
      * ApiResponseWellnessCode를 HttpStatus로 매핑합니다.
+     * <p>
+     * 매핑 규칙:
+     * <ul>
+     *   <li>SUCCESS → 200 OK</li>
+     *   <li>DATA_PROCESSING_FAILURE, CI_VALUE_IS_ERROR, MEMBER_VALUE_IS_ERROR → 400 BAD_REQUEST</li>
+     *   <li>NO_DATA_FOUND, DOES_NOT_EXIST_DELY_ERROR, DOES_NOT_EXIST_ORDR_RQST_ERROR → 404 NOT_FOUND</li>
+     *   <li>AUTH_USER_NOT_FOUND, AUTH_PASSWORD_MISMATCH, AUTH_ACCOUNT_DISABLED,
+     *       AUTH_TOKEN_NOT_FOUND, AUTH_TOKEN_INVALID, AUTH_TOKEN_EXPIRED → 401 UNAUTHORIZED</li>
+     *   <li>AUTH_ACCESS_DENIED → 403 FORBIDDEN</li>
+     *   <li>SYSTEM_ERROR → 500 INTERNAL_SERVER_ERROR</li>
+     * </ul>
      */
     private HttpStatus mapWellnessCodeToHttpStatus(ApiResponseWellnessCode wellnessCode) {
         return switch (wellnessCode) {
@@ -104,6 +115,7 @@ public class ApiResponseBodyAdvice implements ResponseBodyAdvice<ApiResponseWell
             case NO_DATA_FOUND, DOES_NOT_EXIST_DELY_ERROR, DOES_NOT_EXIST_ORDR_RQST_ERROR -> HttpStatus.NOT_FOUND;
             case AUTH_USER_NOT_FOUND, AUTH_PASSWORD_MISMATCH, AUTH_ACCOUNT_DISABLED, 
                  AUTH_TOKEN_NOT_FOUND, AUTH_TOKEN_INVALID, AUTH_TOKEN_EXPIRED -> HttpStatus.UNAUTHORIZED;
+            case AUTH_ACCESS_DENIED -> HttpStatus.FORBIDDEN;
             case SYSTEM_ERROR -> HttpStatus.INTERNAL_SERVER_ERROR;
         };
     }

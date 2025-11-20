@@ -10,6 +10,9 @@ spring:
       root: INFO
       com.aiwellness: INFO
       org.springframework.web: INFO
+    # HTTP 요청/응답 로깅 활성화 여부 (서버별 오버라이드 가능)
+    http:
+      enabled: ${LOGGING_HTTP_ENABLED:true}  # 기본값: true, application-common-stg.yml에서 상속
   
   # 데이터베이스 설정 (스테이징 환경: PostgreSQL)
   datasource:
@@ -23,9 +26,3 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
-
-# JWT 설정
-jwt:
-  secret: ${JWT_SECRET:ai-wellness-app-secret-key-for-jwt-token-generation-minimum-256-bits-stg}
-  expiration: ${JWT_EXPIRATION:86400000}
-

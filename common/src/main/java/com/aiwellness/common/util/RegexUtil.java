@@ -55,5 +55,64 @@ public class RegexUtil {
     
     // 비밀번호 (8자 이상, 영문/숫자/특수문자 조합)
     public static final String PASSWORD = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
+    
+    // ========== 마스킹 관련 정규식 패턴 ==========
+    
+    // 아이디 마스킹 (2글자 뒤로 마스킹)
+    public static final String ID_MASKING = "(?<=.{2}).";
+    
+    // 한글 이름 패턴
+    public static final String KOREAN_NAME_ONLY = "(^[가-힣]+)$";
+    
+    // 전화번호 패턴 (11자리)
+    public static final String PHONE_11_DIGITS = "(\\d{2,3})-?(\\d{3,4})-?(\\d{4})$";
+    
+    // 전화번호 패턴 (10자리 - 서울)
+    public static final String PHONE_10_DIGITS_SEOUL = "(\\d{2})-?(\\d{3,4})-?(\\d{4})$";
+    
+    // 전화번호 패턴 (10자리 - 기타)
+    public static final String PHONE_10_DIGITS_OTHER = "(\\d{3})-?(\\d{3,4})-?(\\d{4})$";
+    
+    // 전화번호 패턴 (9자리)
+    public static final String PHONE_9_DIGITS = "(\\d{2,3})-?(\\d{3,4})-?(\\d{4})$";
+    
+    // 전화번호 패턴 (8자리)
+    public static final String PHONE_8_DIGITS = "(\\d{4})-?(\\d{4})$";
+    
+    // 이메일 패턴 (마스킹용)
+    public static final String EMAIL_MASKING = "\\b(\\S+)+@(\\S+.\\S+)";
+    
+    // 이메일 마스킹 (앞 2자리 이후)
+    public static final String EMAIL_MASKING_ADVANCED = "(?<=.{2})[^@\\n](?=[^@\\n]*?@)|(?:(?<=@.)|(?!^)\\G(?=[^@\\n]*$)).(?=.*\\.)";
+    
+    // 이메일 삭제용 마스킹
+    public static final String EMAIL_MASKING_DESTROY = "(?<=.{2})[^@\\n](?=[^@\\n]*?@)";
+    
+    // 계좌번호 패턴 (숫자만)
+    public static final String ACCOUNT_NUMBER = "(^[0-9]+)$";
+    
+    // 카드번호 패턴 (16자리 또는 15자리)
+    public static final String CREDIT_CARD = "(\\d{4})-?(\\d{4})-?(\\d{4})-?(\\d{3,4})$";
+    
+    // 카드번호 전체 마스킹 패턴
+    public static final String CREDIT_CARD_FULL = "(\\d{4})(\\d{4})\\d{4}(\\d{3,4})";
+    
+    // 주소 패턴 (구주소)
+    public static final String ADDRESS_OLD = "(([가-힣]+(\\d{1,5}|\\d{1,5}(,|.)\\d{1,5}|)+(읍|면|동|가|리))(구|)((\\d{1,5}(~|-)\\d{1,5}|\\d{1,5})(가|리|)|))([ ](산(\\d{1,5}(~|-)\\d{1,5}|\\d{1,5}))|)|";
+    
+    // 주소 패턴 (도로명 주소)
+    public static final String ADDRESS_NEW = "(([가-힣]|(\\d{1,5}(~|-)\\d{1,5})|\\d{1,5})+(로|길))";
+    
+    // 주소 숫자 마스킹
+    public static final String ADDRESS_NUMBER_MASKING = "[0-9]";
+    
+    // 사업자등록번호 마스킹 (마지막 4자리)
+    public static final String BUSINESS_NO_MASKING = "(?<=.{9}).";
+    
+    // 휴대폰 번호 패턴
+    public static final String MOBILE_PHONE = "^(?<f>01[016789])(?<m>\\d*)(?<l>\\d{4})$";
+    
+    // JSON 필드 패턴 (마스킹용)
+    public static final String JSON_FIELD_PATTERN = "\"%s\"\\s*:\\s*\"([^\"]+)\"";
 }
 

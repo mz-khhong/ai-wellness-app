@@ -1,0 +1,15 @@
+# Common 모듈 - 개발 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+# JWT 설정 (모든 서버가 동일한 secret 사용 - admin에서 생성한 토큰을 customer/manager에서도 검증 가능)
+jwt:
+  secret: ${JWT_SECRET:ai-wellness-app-secret-key-for-jwt-token-generation-minimum-256-bits-required-for-hmac-sha-algorithm}
+  expiration: ${JWT_EXPIRATION:86400000}  # 24시간
+  algorithm: ${JWT_ALGORITHM:HS256}  # HS256 (기본값) 또는 RS256
+  # RS256 사용 시 아래 키 설정 필요
+  rs256:
+    private-key: ${JWT_RS256_PRIVATE_KEY:}  # Base64 인코딩된 Private Key
+    public-key: ${JWT_RS256_PUBLIC_KEY:}    # Base64 인코딩된 Public Key

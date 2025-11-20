@@ -1,7 +1,6 @@
 package com.aiwellness.common.security.interceptor;
 
-import com.aiwellness.common.security.RoleInterface;
-import com.aiwellness.common.security.SecurityUser;
+import com.aiwellness.common.security.CurrentUser;
 import com.aiwellness.common.security.annotation.RequiredRole;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,13 +62,13 @@ public class RoleCheckInterceptor implements HandlerInterceptor {
         
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
-        if (authentication == null || !(authentication.getPrincipal() instanceof SecurityUser)) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof CurrentUser)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
         
-        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
-        Set<String> userRoles = securityUser.getAuthorities().stream()
+        CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
+        Set<String> userRoles = currentUser.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
         
@@ -82,7 +81,7 @@ public class RoleCheckInterceptor implements HandlerInterceptor {
         
         if (!hasRequiredRole) {
             log.warn("Access denied for user: {} with roles: {}, required: {}", 
-                    securityUser.getEmail(), userRoles, requiredRoles);
+                    currentUser.getEmail(), userRoles, requiredRoles);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }

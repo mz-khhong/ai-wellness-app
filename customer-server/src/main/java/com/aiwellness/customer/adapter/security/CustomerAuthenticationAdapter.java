@@ -2,6 +2,7 @@ package com.aiwellness.customer.adapter.security;
 
 import com.aiwellness.customer.domain.model.customer.Customer;
 import com.aiwellness.customer.domain.model.enums.CustomerRole;
+import com.aiwellness.customer.domain.model.enums.CustomerStatus;
 import com.aiwellness.customer.domain.port.customer.CustomerRepositoryPort;
 import com.aiwellness.common.code.ApiResponseWellnessCode;
 import com.aiwellness.common.security.AuthenticationException;
@@ -57,7 +58,7 @@ public class CustomerAuthenticationAdapter implements AuthenticationPort {
         }
         
         // 상태 검증 (활성화된 사용자만 로그인 가능)
-        if (customer.getStatus() != com.aiwellness.customer.domain.model.enums.CustomerStatus.ACTIVE) {
+        if (customer.getStatus() != CustomerStatus.ACTIVE) {
             log.warn("[Adapter/Security] CustomerAuthenticationAdapter.authenticate() - 비활성화된 사용자: email={}, status={}", 
                     email, customer.getStatus());
             throw new AuthenticationException(

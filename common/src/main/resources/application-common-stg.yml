@@ -1,0 +1,15 @@
+# Common 모듈 - 스테이징 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: stg
+
+# Swagger/OpenAPI 설정 (스테이징 환경: 비활성화)
+# application-common.yml의 기본값(true)을 오버라이드하여 false로 설정
+# 환경 변수 SWAGGER_ENABLED=true로 설정하면 활성화 가능
+springdoc:
+  api-docs:
+    enabled: ${SWAGGER_ENABLED:false}  # 기본값: false (환경 변수 없으면)
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:false}  # 기본값: false (환경 변수 없으면)
+

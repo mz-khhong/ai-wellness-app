@@ -2,6 +2,11 @@
 jwt:
   secret: ai-wellness-app-secret-key-for-jwt-token-generation-minimum-256-bits-required-for-hmac-sha-algorithm
   expiration: 86400000 # 24 hours
+  algorithm: ${JWT_ALGORITHM:HS256}  # HS256 (기본값) 또는 RS256
+  # RS256 사용 시 아래 키 설정 필요
+  rs256:
+    private-key: ${JWT_RS256_PRIVATE_KEY:}  # Base64 인코딩된 Private Key
+    public-key: ${JWT_RS256_PUBLIC_KEY:}    # Base64 인코딩된 Public Key
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
@@ -17,26 +22,62 @@ mybatis:
     lazy-loading-enabled: false
     aggressive-lazy-loading: false
 
-# Swagger/OpenAPI 설정
+# Swagger/OpenAPI 설정 (기본값: 활성화)
 springdoc:
   api-docs:
     path: /api-docs
-    enabled: true
+    enabled: ${SWAGGER_ENABLED:true}  # 기본값: true
   swagger-ui:
     path: /swagger-ui.html
-    enabled: true
+    enabled: ${SWAGGER_ENABLED:true}  # 기본값: true
     tags-sorter: alpha
     operations-sorter: alpha
     try-it-out-enabled: true
     filter: true
-  # group-configs는 SwaggerConfig.java의 GroupedOpenApi 빈으로 관리
+  # Swagger 정보 설정
+  info:
+    title: ${SWAGGER_TITLE:Wellness App API Documentation}
+    description: ${SWAGGER_DESCRIPTION:Wellness App의 API 문서입니다.}
+    version: ${SWAGGER_VERSION:1.0.0}
+    contact:
+      name: ${SWAGGER_CONTACT_NAME:Wellness App Team}
+      email: ${SWAGGER_CONTACT_EMAIL:dev@wellness.com}
+    license:
+      name: ${SWAGGER_LICENSE_NAME:Apache 2.0}
+      url: ${SWAGGER_LICENSE_URL:https://www.apache.org/licenses/LICENSE-2.0.html}
+    servers:
+      - url: ${SWAGGER_SERVER_URL:http://localhost:8080}
+        description: ${SWAGGER_SERVER_DESCRIPTION:Wellness App Server}
 
-# 로깅 설정
+# 필터 설정 (공통)
+# TraceIdFilter, HttpLoggingFilter에서 제외할 경로 목록
+filter:
+  excluded-paths:
+    - /actuator
+    - /swagger-ui
+    - /v3/api-docs
+    - /api-docs
+    - /webjars
+    - /swagger-resources
+
+# Spring Security 설정 (공통)
+# 인증 없이 접근 가능한 경로 목록 (Public endpoints)
+security:
+  public-paths:
+    - /api/v1/auth/**
+    - /api/v1/appCode/**
+    - /actuator/**
+    - /swagger-ui/**
+    - /swagger-ui.html
+    - /v3/api-docs/**
+    - /api-docs/**
+    - /swagger-resources/**
+    - /webjars/**
+
+# 로깅 설정 (공통)
 logging:
   level:
     com.aiwellness.common.persistence.interceptor.MyBatisQueryInterceptor: INFO
-    org.apache.ibatis: DEBUG
-    java.sql: DEBUG
-    java.sql.Statement: DEBUG
-    java.sql.PreparedStatement: DEBUG
-    java.sql.ResultSet: DEBUG
+  http:
+    enabled: ${LOGGING_HTTP_ENABLED:true}  # 기본값: true
+    max-body-length: ${LOGGING_HTTP_MAX_BODY_LENGTH:300}  # HTTP 로깅 시 Body 최대 길이 (초과 시 잘림), 기본값: 300자

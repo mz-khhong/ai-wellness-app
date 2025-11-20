@@ -2,6 +2,7 @@ package com.aiwellness.manager.adapter.security;
 
 import com.aiwellness.manager.domain.model.manager.Manager;
 import com.aiwellness.manager.domain.model.enums.ManagerRole;
+import com.aiwellness.manager.domain.model.enums.ManagerStatus;
 import com.aiwellness.manager.domain.port.manager.ManagerRepositoryPort;
 import com.aiwellness.common.code.ApiResponseWellnessCode;
 import com.aiwellness.common.security.AuthenticationException;
@@ -57,7 +58,7 @@ public class ManagerAuthenticationAdapter implements AuthenticationPort {
         }
         
         // 상태 검증 (활성화된 사용자만 로그인 가능)
-        if (manager.getStatus() != com.aiwellness.manager.domain.model.enums.ManagerStatus.ACTIVE) {
+        if (manager.getStatus() != ManagerStatus.ACTIVE) {
             log.warn("[Adapter/Security] ManagerAuthenticationAdapter.authenticate() - 비활성화된 사용자: email={}, status={}", 
                     email, manager.getStatus());
             throw new AuthenticationException(

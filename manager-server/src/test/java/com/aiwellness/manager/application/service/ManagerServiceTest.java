@@ -1,7 +1,7 @@
 package com.aiwellness.manager.application.service;
 
-import com.aiwellness.manager.adapter.web.manager.dto.ManagerCreateRequest;
-import com.aiwellness.manager.adapter.web.manager.dto.ManagerResponse;
+import com.aiwellness.manager.adapter.web.manager.dto.request.ManagerCreateRequest;
+import com.aiwellness.manager.adapter.web.manager.dto.response.ManagerResponse;
 import com.aiwellness.manager.application.service.manager.ManagerService;
 import com.aiwellness.manager.domain.model.manager.Manager;
 import com.aiwellness.manager.domain.port.manager.ManagerRepositoryPort;

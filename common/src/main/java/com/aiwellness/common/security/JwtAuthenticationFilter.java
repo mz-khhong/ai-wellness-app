@@ -56,16 +56,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Long facilityGroupId = jwtTokenProvider.getFacilityGroupId(token);
             List<String> roles = jwtTokenProvider.getRoles(token);
             
-            SecurityUser securityUser = SecurityUser.builder()
+            CurrentUser currentUser = CurrentUser.builder()
                     .userId(userId)
                     .userUuid(userUuid)
                     .email(email)
+                    .password(null)  // JWT 인증에서는 password 불필요
+                    .name(null)  // 토큰에 name 정보가 없으면 null
                     .facilityGroupId(facilityGroupId)
                     .roles(roles)
                     .build();
             
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    securityUser, null, securityUser.getAuthorities());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, null, currentUser.getAuthorities());
             
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.debug("Set Authentication for user: {}", email);

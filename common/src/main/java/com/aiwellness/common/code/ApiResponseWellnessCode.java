@@ -34,13 +34,14 @@ public enum ApiResponseWellnessCode {
   AUTH_TOKEN_NOT_FOUND("20104", "auth.tokenNotFound"),
   AUTH_TOKEN_INVALID("20105", "auth.tokenInvalid"),
   AUTH_TOKEN_EXPIRED("20106", "auth.tokenExpired"),
+  AUTH_ACCESS_DENIED("20107", "auth.accessDenied"),
   MEMBER_VALUE_IS_ERROR("20200", "response.memberNumberInvalid"),
   DOES_NOT_EXIST_DELY_ERROR("30000", "response.delyNotExistError"),
   DOES_NOT_EXIST_ORDR_RQST_ERROR("30001", "response.ordrRqstNotExistError"),
   SYSTEM_ERROR("90000", "response.systemError");
 
   private final String code;
-  private final String messageKey;  // 메시지 키 (다국어 지원)
+  private final String messageKey;
 
   ApiResponseWellnessCode(String code, String messageKey) {
     this.code = code;
@@ -52,6 +53,6 @@ public enum ApiResponseWellnessCode {
    * MessageUtil을 통해 실제 메시지를 가져옵니다.
    */
   public String getMessage() {
-    return this.messageKey; // MessageUtil에서 실제 메시지로 변환
+    return this.messageKey;
   }
 }

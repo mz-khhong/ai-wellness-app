@@ -1,6 +1,6 @@
 package com.aiwellness.customer.adapter.web.profile;
 
-import com.aiwellness.customer.adapter.web.profile.dto.ProfileResponse;
+import com.aiwellness.customer.adapter.web.profile.dto.response.ProfileResponse;
 import com.aiwellness.customer.application.service.profile.ProfileService;
 import com.aiwellness.common.response.ApiResponseWellness;
 import com.aiwellness.common.support.ApiResponseGenerator;

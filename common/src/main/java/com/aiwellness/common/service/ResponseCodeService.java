@@ -2,8 +2,8 @@ package com.aiwellness.common.service;
 
 import com.aiwellness.common.code.ApiResponseWellnessCode;
 import com.aiwellness.common.domain.port.ErrorCodeProviderPort;
-import com.aiwellness.common.dto.ResponseCodeData;
-import com.aiwellness.common.dto.ResponseCodeInfo;
+import com.aiwellness.common.controller.appCode.dto.response.AppCodeData;
+import com.aiwellness.common.controller.appCode.dto.response.AppCodeInfo;
 import com.aiwellness.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,18 +52,18 @@ public class ResponseCodeService {
      * @param locale Locale (Accept-Language 헤더 기반)
      * @return 구조화된 응답 코드 데이터
      */
-    public ResponseCodeData getAllResponseCodes(Locale locale) {
+    public AppCodeData getAllResponseCodes(Locale locale) {
         if (locale == null) {
             locale = Locale.KOREAN; // 기본값: 한국어
         }
         
         // 공통 응답 코드 조회
-        List<ResponseCodeInfo> commonCodes = getCommonResponseCodes(locale);
+        List<AppCodeInfo> commonCodes = getCommonResponseCodes(locale);
         
         // 서버별 에러 코드 조회 (비즈니스 영역별로 분리)
-        Map<String, Map<String, List<ResponseCodeInfo>>> serverCodes = getServerSpecificErrorCodes(locale);
+        Map<String, Map<String, List<AppCodeInfo>>> serverCodes = getServerSpecificErrorCodes(locale);
         
-        return ResponseCodeData.builder()
+        return AppCodeData.builder()
                 .common(commonCodes)
                 .servers(serverCodes)
                 .build();
@@ -72,12 +72,12 @@ public class ResponseCodeService {
     /**
      * 공통 응답 코드 목록 조회
      */
-    private List<ResponseCodeInfo> getCommonResponseCodes(Locale locale) {
+    private List<AppCodeInfo> getCommonResponseCodes(Locale locale) {
         return Arrays.stream(ApiResponseWellnessCode.values())
                 .map(code -> {
                     String messageKey = code.getMessageKey();
                     String translatedMessage = getTranslatedMessage(messageKey, locale);
-                    return new ResponseCodeInfo(
+                    return new AppCodeInfo(
                             code.getCode(),
                             translatedMessage,
                             getCodeType(code)
@@ -96,19 +96,19 @@ public class ResponseCodeService {
      * - 의존성 방향: Common ← 각 서버 (포트 인터페이스)
      * 
      * @param locale Locale
-     * @return Map<서버명, Map<비즈니스영역, List<ResponseCodeInfo>>>
+     * @return Map<서버명, Map<비즈니스영역, List<AppCodeInfo>>>
      */
-    private Map<String, Map<String, List<ResponseCodeInfo>>> getServerSpecificErrorCodes(Locale locale) {
+    private Map<String, Map<String, List<AppCodeInfo>>> getServerSpecificErrorCodes(Locale locale) {
         if (errorCodeProviders == null || errorCodeProviders.isEmpty()) {
             return Collections.emptyMap();
         }
         
-        Map<String, Map<String, List<ResponseCodeInfo>>> result = new HashMap<>();
+        Map<String, Map<String, List<AppCodeInfo>>> result = new HashMap<>();
         
         for (ErrorCodeProviderPort provider : errorCodeProviders) {
             try {
                 String serverName = provider.getServerName();
-                Map<String, List<ResponseCodeInfo>> domainCodes = provider.getErrorCodesByDomain(locale);
+                Map<String, List<AppCodeInfo>> domainCodes = provider.getErrorCodesByDomain(locale);
                 result.put(serverName, domainCodes);
             } catch (Exception e) {
                 log.warn("서버별 에러 코드 조회 실패: {}", e.getMessage());

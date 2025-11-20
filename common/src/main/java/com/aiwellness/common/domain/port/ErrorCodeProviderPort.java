@@ -1,6 +1,6 @@
 package com.aiwellness.common.domain.port;
 
-import com.aiwellness.common.dto.ResponseCodeInfo;
+import com.aiwellness.common.controller.appCode.dto.response.AppCodeInfo;
 
 import java.util.List;
 import java.util.Locale;
@@ -40,12 +40,12 @@ public interface ErrorCodeProviderPort {
     /**
      * 서버별 에러 코드를 비즈니스 영역별로 조회
      * <p>
-     * 반환 형식: Map<비즈니스영역, List<ResponseCodeInfo>>
+     * 반환 형식: Map<비즈니스영역, List<AppCodeInfo>>
      * 예: {"admin": [코드1, 코드2, ...], "profile": [코드1, ...]}
      * 
      * @param locale Locale (다국어 메시지용)
      * @return 비즈니스 영역별 에러 코드 맵
      */
-    Map<String, List<ResponseCodeInfo>> getErrorCodesByDomain(Locale locale);
+    Map<String, List<AppCodeInfo>> getErrorCodesByDomain(Locale locale);
 }
 

@@ -1,7 +1,7 @@
 package com.aiwellness.manager.adapter.infrastructure;
 
 import com.aiwellness.common.domain.port.ErrorCodeProviderPort;
-import com.aiwellness.common.dto.ResponseCodeInfo;
+import com.aiwellness.common.controller.appCode.dto.response.AppCodeInfo;
 import com.aiwellness.common.util.MessageUtil;
 import com.aiwellness.manager.exception.ManagerErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -52,20 +52,20 @@ public class ErrorCodeProviderAdapter implements ErrorCodeProviderPort {
     }
     
     @Override
-    public Map<String, List<ResponseCodeInfo>> getErrorCodesByDomain(Locale locale) {
+    public Map<String, List<AppCodeInfo>> getErrorCodesByDomain(Locale locale) {
         // Manager 서버의 에러 코드를 "manager" 비즈니스 영역으로 그룹화
-        List<ResponseCodeInfo> managerCodes = Arrays.stream(ManagerErrorCode.values())
+        List<AppCodeInfo> managerCodes = Arrays.stream(ManagerErrorCode.values())
                 .map(errorCode -> {
                     // 코드 형식: HttpStatus.value() + 순서 (예: 40401, 40901, 40902)
                     String code = generateErrorCode(errorCode);
                     String messageKey = errorCode.getMessageKey();
                     String message = getTranslatedMessage(messageKey, locale);
                     log.debug("ManagerErrorCode: code={}, messageKey={}, message={}, locale={}", code, messageKey, message, locale);
-                    return new ResponseCodeInfo(code, message, "ERROR");
+                    return new AppCodeInfo(code, message, "ERROR");
                 })
                 .collect(Collectors.toList());
         
-        Map<String, List<ResponseCodeInfo>> result = new HashMap<>();
+        Map<String, List<AppCodeInfo>> result = new HashMap<>();
         result.put(DOMAIN_NAME, managerCodes);
         return result;
     }

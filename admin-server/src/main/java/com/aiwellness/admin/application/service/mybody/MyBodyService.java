@@ -1,6 +1,6 @@
 package com.aiwellness.admin.application.service.mybody;
 
-import com.aiwellness.admin.adapter.web.mybody.dto.MyBodyResponse;
+import com.aiwellness.admin.adapter.web.mybody.dto.response.MyBodyResponse;
 import com.aiwellness.admin.domain.model.mybody.MyBody;
 import com.aiwellness.admin.domain.port.mybody.MyBodyRepositoryPort;
 import com.aiwellness.admin.exception.AdminBusinessException;

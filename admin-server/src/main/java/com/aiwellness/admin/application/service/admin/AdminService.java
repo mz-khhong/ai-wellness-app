@@ -1,8 +1,8 @@
 package com.aiwellness.admin.application.service.admin;
 
-import com.aiwellness.admin.adapter.web.admin.dto.AdminCreateRequest;
-import com.aiwellness.admin.adapter.web.admin.dto.AdminResponse;
-import com.aiwellness.admin.adapter.web.admin.dto.AdminUpdateRequest;
+import com.aiwellness.admin.adapter.web.admin.dto.request.AdminCreateRequest;
+import com.aiwellness.admin.adapter.web.admin.dto.request.AdminUpdateRequest;
+import com.aiwellness.admin.adapter.web.admin.dto.response.AdminResponse;
 import com.aiwellness.admin.domain.model.admin.Admin;
 import com.aiwellness.admin.domain.model.enums.AdminStatus;
 import com.aiwellness.admin.domain.port.admin.AdminRepositoryPort;

@@ -46,5 +46,35 @@ public class CategoryAdapter implements CategoryRepositoryPort {
     public void deleteById(Long id) {
         categoryMapper.deleteById(id);
     }
+
+    @Override
+    public List<Category> findAllWithPaging(int offset, int limit) {
+        return findAllWithPaging(offset, limit, null);
+    }
+    
+    @Override
+    public List<Category> findAllWithPaging(int offset, int limit, String orderBy) {
+        return categoryMapper.findAllWithPaging(offset, limit, orderBy);
+    }
+
+    @Override
+    public List<Category> findAllActiveWithPaging(int offset, int limit) {
+        return findAllActiveWithPaging(offset, limit, null);
+    }
+    
+    @Override
+    public List<Category> findAllActiveWithPaging(int offset, int limit, String orderBy) {
+        return categoryMapper.findAllActiveWithPaging(offset, limit, orderBy);
+    }
+
+    @Override
+    public long countAll() {
+        return categoryMapper.countAll();
+    }
+
+    @Override
+    public long countAllActive() {
+        return categoryMapper.countAllActive();
+    }
 }
 

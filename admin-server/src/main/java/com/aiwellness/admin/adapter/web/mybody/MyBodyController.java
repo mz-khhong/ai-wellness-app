@@ -1,8 +1,10 @@
 package com.aiwellness.admin.adapter.web.mybody;
 
-import com.aiwellness.admin.adapter.web.mybody.dto.MyBodyResponse;
+import com.aiwellness.admin.adapter.web.mybody.dto.response.MyBodyResponse;
 import com.aiwellness.admin.application.service.mybody.MyBodyService;
 import com.aiwellness.common.response.ApiResponseWellness;
+import com.aiwellness.common.security.CurrentUser;
+import com.aiwellness.common.security.annotation.AuthenticatedUser;
 import com.aiwellness.common.support.ApiResponseGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/mybody")
+@RequestMapping("/api/v1/mybody")
 @RequiredArgsConstructor
 @Tag(name = "MY BODY", description = "MY BODY 관리 API")
 public class MyBodyController {
@@ -43,17 +45,25 @@ public class MyBodyController {
     
     @GetMapping("/{id}")
     @Operation(summary = "MY BODY 조회", description = "ID로 MY BODY 정보를 조회합니다.")
-    public ApiResponseWellness<MyBodyResponse> getMyBody(@PathVariable Long id) {
-        log.info("[Adapter/Web] MyBodyController.getMyBody() - HTTP 요청 수신: GET /api/mybody/{}", id);
-        log.debug("[Adapter/Web] MyBodyController.getMyBody() - 파라미터: id={}", id);
+    public ApiResponseWellness<MyBodyResponse> getMyBody(
+            @PathVariable Long id,
+            @AuthenticatedUser CurrentUser user) {
+        log.info("[Adapter/Web] MyBodyController.getMyBody() - HTTP 요청 수신: GET /api/mybody/{}, userId={}, email={}", 
+                id, user.getUserId(), user.getEmail());
+        log.debug("[Adapter/Web] MyBodyController.getMyBody() - 파라미터: id={}, userId={}, facilityGroupId={}", 
+                id, user.getUserId(), user.getFacilityGroupId());
         return ApiResponseGenerator.success(myBodyService.getMyBody(id));
     }
     
     @GetMapping("/customer/{customerId}")
     @Operation(summary = "고객별 MY BODY 조회", description = "고객 ID로 MY BODY 정보를 조회합니다.")
-    public ApiResponseWellness<MyBodyResponse> getMyBodyByCustomerId(@PathVariable Long customerId) {
-        log.info("[Adapter/Web] MyBodyController.getMyBodyByCustomerId() - HTTP 요청 수신: GET /api/mybody/customer/{}", customerId);
-        log.debug("[Adapter/Web] MyBodyController.getMyBodyByCustomerId() - 파라미터: customerId={}", customerId);
+    public ApiResponseWellness<MyBodyResponse> getMyBodyByCustomerId(
+            @PathVariable Long customerId,
+            @AuthenticatedUser CurrentUser user) {
+        log.info("[Adapter/Web] MyBodyController.getMyBodyByCustomerId() - HTTP 요청 수신: GET /api/mybody/customer/{}, userId={}, email={}", 
+                customerId, user.getUserId(), user.getEmail());
+        log.debug("[Adapter/Web] MyBodyController.getMyBodyByCustomerId() - 파라미터: customerId={}, userId={}, facilityGroupId={}", 
+                customerId, user.getUserId(), user.getFacilityGroupId());
         return ApiResponseGenerator.success(myBodyService.getMyBodyByCustomerId(customerId));
     }
 }

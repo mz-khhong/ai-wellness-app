@@ -1,8 +1,8 @@
 package com.aiwellness.manager.adapter.web.manager;
 
-import com.aiwellness.manager.adapter.web.manager.dto.ManagerCreateRequest;
-import com.aiwellness.manager.adapter.web.manager.dto.ManagerResponse;
-import com.aiwellness.manager.adapter.web.manager.dto.ManagerUpdateRequest;
+import com.aiwellness.manager.adapter.web.manager.dto.request.ManagerCreateRequest;
+import com.aiwellness.manager.adapter.web.manager.dto.request.ManagerUpdateRequest;
+import com.aiwellness.manager.adapter.web.manager.dto.response.ManagerResponse;
 import com.aiwellness.manager.application.service.manager.ManagerService;
 import com.aiwellness.manager.code.ManagerResponseCode;
 import com.aiwellness.common.response.ApiResponseWellness;

@@ -19,7 +19,9 @@ public enum ManagerErrorCode {
     MANAGER_PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "manager.password.mismatch"),
     MANAGER_DELETE_FAILED(HttpStatus.BAD_REQUEST, "manager.delete.failed"),
     MANAGER_UPDATE_FAILED(HttpStatus.BAD_REQUEST, "manager.update.failed"),
-    MANAGER_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "manager.not.authorized");
+    MANAGER_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "manager.not.authorized"),
+    CUSTOMER_NOT_FOUND(HttpStatus.NOT_FOUND, "customer.not.found"),
+    CUSTOMER_FACILITY_GROUP_MISMATCH(HttpStatus.FORBIDDEN, "customer.facility.group.mismatch");
     
     private final HttpStatus status;
     private final String messageKey;  // 메시지 키 (다국어 지원)
@@ -34,9 +36,9 @@ public enum ManagerErrorCode {
      */
     public ApiResponseWellnessCode toApiResponseWellnessCode() {
         return switch (this) {
-            case MANAGER_NOT_FOUND -> ApiResponseWellnessCode.NO_DATA_FOUND;
+            case MANAGER_NOT_FOUND, CUSTOMER_NOT_FOUND -> ApiResponseWellnessCode.NO_DATA_FOUND;
             case MANAGER_ALREADY_EXISTS, MANAGER_EMAIL_DUPLICATE -> ApiResponseWellnessCode.DATA_PROCESSING_FAILURE;
-            case MANAGER_INACTIVE, MANAGER_SUSPENDED, MANAGER_NOT_AUTHORIZED -> ApiResponseWellnessCode.CI_VALUE_IS_ERROR;
+            case MANAGER_INACTIVE, MANAGER_SUSPENDED, MANAGER_NOT_AUTHORIZED, CUSTOMER_FACILITY_GROUP_MISMATCH -> ApiResponseWellnessCode.CI_VALUE_IS_ERROR;
             case MANAGER_PASSWORD_MISMATCH -> ApiResponseWellnessCode.AUTH_PASSWORD_MISMATCH;
             case MANAGER_DELETE_FAILED, MANAGER_UPDATE_FAILED -> ApiResponseWellnessCode.DATA_PROCESSING_FAILURE;
             default -> ApiResponseWellnessCode.SYSTEM_ERROR;

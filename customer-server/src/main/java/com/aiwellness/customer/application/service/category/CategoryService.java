@@ -1,5 +1,8 @@
 package com.aiwellness.customer.application.service.category;
 
+import com.aiwellness.common.dto.request.PageRequest;
+import com.aiwellness.common.dto.response.PageResponse;
+import com.aiwellness.customer.adapter.web.category.dto.response.CategoryResponse;
 import com.aiwellness.customer.domain.category.model.Category;
 import com.aiwellness.customer.domain.category.port.CategoryRepositoryPort;
 import com.aiwellness.customer.exception.CustomerBusinessException;
@@ -11,6 +14,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * com.aiwellness.customer.application.service.category
@@ -78,6 +82,102 @@ public class CategoryService {
         log.info("[Application/Service] CategoryService.createCategory() - Use Case 완료: id={}, name={}", 
                 saved.getId(), saved.getName());
         return saved;
+    }
+    
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
+    public PageResponse<CategoryResponse> getAllCategoriesWithPaging(PageRequest pageRequest) {
+        log.info("[Application/Service] CategoryService.getAllCategoriesWithPaging() - Use Case 시작: page={}, size={}, sort={}, direction={}", 
+                pageRequest.getPage(), pageRequest.getSize(), pageRequest.getSort(), pageRequest.getDirection());
+        
+        // 허용된 정렬 필드 목록 (SQL Injection 방지)
+        List<String> allowedSortFields = List.of("id", "name", "displayOrder", "createdAt", "updatedAt");
+        
+        // ORDER BY 절 생성
+        String orderBy = pageRequest.toOrderByClause(allowedSortFields);
+        
+        // 페이징 조회
+        List<Category> categories;
+        if (orderBy != null && !orderBy.isEmpty()) {
+            // 정렬이 있는 경우
+            categories = categoryRepositoryPort.findAllWithPaging(
+                    pageRequest.getOffset(), 
+                    pageRequest.getSize(), 
+                    orderBy
+            );
+        } else {
+            // 기본 정렬
+            categories = categoryRepositoryPort.findAllWithPaging(
+                    pageRequest.getOffset(), 
+                    pageRequest.getSize()
+            );
+        }
+        
+        // 전체 개수 조회
+        long totalElements = categoryRepositoryPort.countAll();
+        
+        // DTO 변환
+        List<CategoryResponse> content = categories.stream()
+                .map(CategoryResponse::from)
+                .collect(Collectors.toList());
+        
+        PageResponse<CategoryResponse> response = PageResponse.of(
+                content,
+                pageRequest.getPage(),
+                pageRequest.getSize(),
+                totalElements
+        );
+        
+        log.info("[Application/Service] CategoryService.getAllCategoriesWithPaging() - Use Case 완료: totalElements={}, totalPages={}", 
+                totalElements, response.getTotalPages());
+        return response;
+    }
+    
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
+    public PageResponse<CategoryResponse> getActiveCategoriesWithPaging(PageRequest pageRequest) {
+        log.info("[Application/Service] CategoryService.getActiveCategoriesWithPaging() - Use Case 시작: page={}, size={}, sort={}, direction={}", 
+                pageRequest.getPage(), pageRequest.getSize(), pageRequest.getSort(), pageRequest.getDirection());
+        
+        // 허용된 정렬 필드 목록 (SQL Injection 방지)
+        List<String> allowedSortFields = List.of("id", "name", "displayOrder", "createdAt", "updatedAt");
+        
+        // ORDER BY 절 생성
+        String orderBy = pageRequest.toOrderByClause(allowedSortFields);
+        
+        // 페이징 조회
+        List<Category> categories;
+        if (orderBy != null && !orderBy.isEmpty()) {
+            // 정렬이 있는 경우
+            categories = categoryRepositoryPort.findAllActiveWithPaging(
+                    pageRequest.getOffset(), 
+                    pageRequest.getSize(), 
+                    orderBy
+            );
+        } else {
+            // 기본 정렬
+            categories = categoryRepositoryPort.findAllActiveWithPaging(
+                    pageRequest.getOffset(), 
+                    pageRequest.getSize()
+            );
+        }
+        
+        // 전체 개수 조회
+        long totalElements = categoryRepositoryPort.countAllActive();
+        
+        // DTO 변환
+        List<CategoryResponse> content = categories.stream()
+                .map(CategoryResponse::from)
+                .collect(Collectors.toList());
+        
+        PageResponse<CategoryResponse> response = PageResponse.of(
+                content,
+                pageRequest.getPage(),
+                pageRequest.getSize(),
+                totalElements
+        );
+        
+        log.info("[Application/Service] CategoryService.getActiveCategoriesWithPaging() - Use Case 완료: totalElements={}, totalPages={}", 
+                totalElements, response.getTotalPages());
+        return response;
     }
 }
 

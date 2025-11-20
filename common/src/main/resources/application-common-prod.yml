@@ -1,0 +1,15 @@
+# Common 모듈 - 운영 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+# Swagger/OpenAPI 설정 (운영 환경: 비활성화)
+# application-common.yml의 기본값(true)을 오버라이드하여 false로 설정
+# 운영 환경에서는 보안상 Swagger를 비활성화
+springdoc:
+  api-docs:
+    enabled: false  # 운영 환경에서는 Swagger 비활성화 (고정값)
+  swagger-ui:
+    enabled: false  # 운영 환경에서는 Swagger UI 비활성화 (고정값)
+

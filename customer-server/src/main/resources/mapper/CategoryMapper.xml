@@ -50,5 +50,43 @@
         WHERE id = #{id}
     </delete>
 
+    <!-- 페이징 조회 (정렬 지원) -->
+    <select id="findAllWithPaging" resultMap="categoryResultMap">
+        SELECT id, name, description, display_order, is_active
+        FROM categories
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+        </if>
+        <if test="orderBy == null or orderBy == ''">
+            ORDER BY display_order ASC, id ASC
+        </if>
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="findAllActiveWithPaging" resultMap="categoryResultMap">
+        SELECT id, name, description, display_order, is_active
+        FROM categories
+        WHERE is_active = true
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+        </if>
+        <if test="orderBy == null or orderBy == ''">
+            ORDER BY display_order ASC, id ASC
+        </if>
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 전체 개수 조회 -->
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*)
+        FROM categories
+    </select>
+
+    <select id="countAllActive" resultType="long">
+        SELECT COUNT(*)
+        FROM categories
+        WHERE is_active = true
+    </select>
+
 </mapper>
 

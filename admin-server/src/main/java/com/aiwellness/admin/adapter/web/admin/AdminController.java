@@ -1,8 +1,8 @@
 package com.aiwellness.admin.adapter.web.admin;
 
-import com.aiwellness.admin.adapter.web.admin.dto.AdminCreateRequest;
-import com.aiwellness.admin.adapter.web.admin.dto.AdminResponse;
-import com.aiwellness.admin.adapter.web.admin.dto.AdminUpdateRequest;
+import com.aiwellness.admin.adapter.web.admin.dto.request.AdminCreateRequest;
+import com.aiwellness.admin.adapter.web.admin.dto.request.AdminUpdateRequest;
+import com.aiwellness.admin.adapter.web.admin.dto.response.AdminResponse;
 import com.aiwellness.admin.application.service.admin.AdminService;
 import com.aiwellness.admin.code.AdminResponseCode;
 import com.aiwellness.common.response.ApiResponseWellness;

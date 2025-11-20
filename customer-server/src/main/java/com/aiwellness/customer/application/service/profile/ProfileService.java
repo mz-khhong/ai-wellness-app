@@ -1,6 +1,6 @@
 package com.aiwellness.customer.application.service.profile;
 
-import com.aiwellness.customer.adapter.web.profile.dto.ProfileResponse;
+import com.aiwellness.customer.adapter.web.profile.dto.response.ProfileResponse;
 import com.aiwellness.customer.domain.model.profile.Profile;
 import com.aiwellness.customer.domain.port.profile.ProfileRepositoryPort;
 import com.aiwellness.customer.exception.CustomerBusinessException;
