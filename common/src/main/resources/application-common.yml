@@ -66,6 +66,7 @@ security:
   public-paths:
     - /api/v1/auth/**
     - /api/v1/appCode/**
+    - /api/v1/messages/**  # 메시지 이벤트 발행 API (테스트용, 인증 없음)
     - /actuator/**
     - /swagger-ui/**
     - /swagger-ui.html
@@ -81,3 +82,26 @@ logging:
   http:
     enabled: ${LOGGING_HTTP_ENABLED:true}  # 기본값: true
     max-body-length: ${LOGGING_HTTP_MAX_BODY_LENGTH:300}  # HTTP 로깅 시 Body 최대 길이 (초과 시 잘림), 기본값: 300자
+
+# Kafka 설정 (공통)
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: ${KAFKA_PRODUCER_ACKS:all}  # all: 모든 리더와 팔로워가 메시지를 받았을 때까지 대기
+      retries: ${KAFKA_PRODUCER_RETRIES:3}
+      properties:
+        max.in.flight.requests.per.connection: ${KAFKA_MAX_IN_FLIGHT_REQUESTS:5}
+        enable.idempotence: ${KAFKA_ENABLE_IDEMPOTENCE:true}  # 중복 방지
+        # 연결 타임아웃 설정 (밀리초)
+        connections.max.idle.ms: ${KAFKA_CONNECTIONS_MAX_IDLE_MS:540000}  # 9분
+        request.timeout.ms: ${KAFKA_REQUEST_TIMEOUT_MS:30000}  # 30초
+        delivery.timeout.ms: ${KAFKA_DELIVERY_TIMEOUT_MS:120000}  # 2분
+        # 메타데이터 관련 설정
+        metadata.max.age.ms: ${KAFKA_METADATA_MAX_AGE_MS:300000}  # 5분
+        # 연결 재시도 설정
+        reconnect.backoff.ms: ${KAFKA_RECONNECT_BACKOFF_MS:50}
+        retry.backoff.ms: ${KAFKA_RETRY_BACKOFF_MS:100}
+    # Consumer 설정은 이 프로젝트에서 사용하지 않음 (메시지 발행만 수행)
