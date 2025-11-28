@@ -7,7 +7,7 @@ import com.aiwellness.admin.domain.model.admin.Admin;
 import com.aiwellness.admin.domain.model.enums.AdminStatus;
 import com.aiwellness.admin.domain.port.admin.AdminRepositoryPort;
 import com.aiwellness.admin.exception.AdminBusinessException;
-import com.aiwellness.admin.exception.AdminErrorCode;
+import com.aiwellness.admin.domain.code.admin.AdminCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,7 +47,7 @@ public class AdminService {
     public AdminResponse getAdmin(Long id) {
         log.info("[Application/Service] AdminService.getAdmin() - Use Case 시작: id={}", id);
         Admin admin = adminRepositoryPort.findById(id)
-                .orElseThrow(() -> new AdminBusinessException(AdminErrorCode.ADMIN_NOT_FOUND));
+                .orElseThrow(() -> new AdminBusinessException(AdminCode.ADMIN_NOT_FOUND));
         log.info("[Application/Service] AdminService.getAdmin() - Use Case 완료: id={}, email={}", id, admin.getEmail());
         return AdminResponse.from(admin);
     }
@@ -58,7 +58,7 @@ public class AdminService {
         adminRepositoryPort.findByEmail(request.getEmail())
                 .ifPresent(existing -> {
                     log.warn("[Application/Service] AdminService.createAdmin() - 이메일 중복: {}", request.getEmail());
-                    throw new AdminBusinessException(AdminErrorCode.ADMIN_EMAIL_DUPLICATE);
+                    throw new AdminBusinessException(AdminCode.ADMIN_EMAIL_DUPLICATE);
                 });
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         Admin admin = Admin.builder()
@@ -80,7 +80,7 @@ public class AdminService {
     public AdminResponse updateAdmin(Long id, AdminUpdateRequest request) {
         log.info("[Application/Service] AdminService.updateAdmin() - Use Case 시작: id={}", id);
         Admin existing = adminRepositoryPort.findById(id)
-                .orElseThrow(() -> new AdminBusinessException(AdminErrorCode.ADMIN_NOT_FOUND));
+                .orElseThrow(() -> new AdminBusinessException(AdminCode.ADMIN_NOT_FOUND));
         if (request.getEmail() != null) {
             existing.setEmail(request.getEmail());
         }
@@ -104,7 +104,7 @@ public class AdminService {
     public void deleteAdmin(Long id) {
         log.info("[Application/Service] AdminService.deleteAdmin() - Use Case 시작: id={}", id);
         Admin existing = adminRepositoryPort.findById(id)
-                .orElseThrow(() -> new AdminBusinessException(AdminErrorCode.ADMIN_NOT_FOUND));
+                .orElseThrow(() -> new AdminBusinessException(AdminCode.ADMIN_NOT_FOUND));
         adminRepositoryPort.deleteById(id);
         log.info("[Application/Service] AdminService.deleteAdmin() - Use Case 완료: id={}", id);
     }

@@ -6,12 +6,9 @@ import com.aiwellness.common.security.annotation.AuthenticatedUser;
 import com.aiwellness.common.support.ApiResponseGenerator;
 import com.aiwellness.manager.adapter.web.customer.dto.response.CustomerResponse;
 import com.aiwellness.manager.application.service.customer.CustomerService;
-import com.aiwellness.manager.exception.ManagerBusinessException;
-import com.aiwellness.manager.exception.ManagerErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +37,6 @@ import java.util.List;
  *  2025. 11. 20.    메가존 시스템            최초 생성
  * </pre>
  */
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
@@ -54,11 +50,7 @@ public class CustomerController {
     public ApiResponseWellness<CustomerResponse> getCustomer(
             @PathVariable Long id,
             @AuthenticatedUser CurrentUser user) {
-        log.info("[Adapter/Web] CustomerController.getCustomer() - HTTP 요청: GET /api/v1/customers/{}, userId={}, email={}, facilityGroupId={}", 
-                id, user.getUserId(), user.getEmail(), user.getFacilityGroupId());
-        CustomerResponse response = customerService.getCustomer(id);
-        log.info("[Adapter/Web] CustomerController.getCustomer() - HTTP 응답: 200 OK, customerId={}", response.getId());
-        return ApiResponseGenerator.success(response);
+        return ApiResponseGenerator.success(customerService.getCustomer(id, user));
     }
     
     @GetMapping("/facility-group/{facilityGroupId}")
@@ -66,31 +58,14 @@ public class CustomerController {
     public ApiResponseWellness<List<CustomerResponse>> getCustomersByFacilityGroup(
             @PathVariable Long facilityGroupId,
             @AuthenticatedUser CurrentUser user) {
-        log.info("[Adapter/Web] CustomerController.getCustomersByFacilityGroup() - HTTP 요청: GET /api/v1/customers/facility-group/{}, userId={}, email={}, userFacilityGroupId={}", 
-                facilityGroupId, user.getUserId(), user.getEmail(), user.getFacilityGroupId());
-        
-        // 현재 로그인한 매니저의 시설 그룹과 요청한 시설 그룹이 일치하는지 확인
-        if (!user.getFacilityGroupId().equals(facilityGroupId)) {
-            log.warn("[Adapter/Web] CustomerController.getCustomersByFacilityGroup() - 시설 그룹 불일치: userFacilityGroupId={}, requestedFacilityGroupId={}", 
-                    user.getFacilityGroupId(), facilityGroupId);
-            throw new ManagerBusinessException(ManagerErrorCode.CUSTOMER_FACILITY_GROUP_MISMATCH);
-        }
-        
-        List<CustomerResponse> responses = customerService.getCustomersByFacilityGroupId(facilityGroupId);
-        log.info("[Adapter/Web] CustomerController.getCustomersByFacilityGroup() - HTTP 응답: 200 OK, count={}", responses.size());
-        return ApiResponseGenerator.success(responses);
+        return ApiResponseGenerator.success(customerService.getCustomersByFacilityGroupId(facilityGroupId, user));
     }
     
     @GetMapping("/my-facility-group")
     @Operation(summary = "내 시설 그룹 고객 목록 조회", description = "현재 로그인한 매니저의 시설 그룹에 속한 고객 목록을 조회합니다.")
     public ApiResponseWellness<List<CustomerResponse>> getMyFacilityGroupCustomers(
             @AuthenticatedUser CurrentUser user) {
-        log.info("[Adapter/Web] CustomerController.getMyFacilityGroupCustomers() - HTTP 요청: GET /api/v1/customers/my-facility-group, userId={}, email={}, facilityGroupId={}", 
-                user.getUserId(), user.getEmail(), user.getFacilityGroupId());
-        
-        List<CustomerResponse> responses = customerService.getCustomersByFacilityGroupId(user.getFacilityGroupId());
-        log.info("[Adapter/Web] CustomerController.getMyFacilityGroupCustomers() - HTTP 응답: 200 OK, count={}", responses.size());
-        return ApiResponseGenerator.success(responses);
+        return ApiResponseGenerator.success(customerService.getCustomersByFacilityGroupId(user.getFacilityGroupId(), user));
     }
 }
 

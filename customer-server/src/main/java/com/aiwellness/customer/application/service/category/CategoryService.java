@@ -36,38 +36,44 @@ public class CategoryService {
     private final CategoryRepositoryPort categoryRepositoryPort;
     
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
-    public Category getCategory(Long id) {
+    public CategoryResponse getCategory(Long id) {
         log.info("[Application/Service] CategoryService.getCategory() - Use Case 시작: id={}", id);
         
         Category category = categoryRepositoryPort.findById(id)
                 .orElseThrow(() -> new CustomerBusinessException(CustomerErrorCode.ENTITY_NOT_FOUND));
         
         log.info("[Application/Service] CategoryService.getCategory() - Use Case 완료: id={}", id);
-        return category;
+        return CategoryResponse.from(category);
     }
     
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
-    public List<Category> getAllCategories() {
+    public List<CategoryResponse> getAllCategories() {
         log.info("[Application/Service] CategoryService.getAllCategories() - Use Case 시작");
         
         List<Category> categories = categoryRepositoryPort.findAll();
+        List<CategoryResponse> responses = categories.stream()
+                .map(CategoryResponse::from)
+                .collect(Collectors.toList());
         
-        log.info("[Application/Service] CategoryService.getAllCategories() - Use Case 완료: count={}", categories.size());
-        return categories;
+        log.info("[Application/Service] CategoryService.getAllCategories() - Use Case 완료: count={}", responses.size());
+        return responses;
     }
     
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
-    public List<Category> getActiveCategories() {
+    public List<CategoryResponse> getActiveCategories() {
         log.info("[Application/Service] CategoryService.getActiveCategories() - Use Case 시작");
         
         List<Category> categories = categoryRepositoryPort.findAllActive();
+        List<CategoryResponse> responses = categories.stream()
+                .map(CategoryResponse::from)
+                .collect(Collectors.toList());
         
-        log.info("[Application/Service] CategoryService.getActiveCategories() - Use Case 완료: count={}", categories.size());
-        return categories;
+        log.info("[Application/Service] CategoryService.getActiveCategories() - Use Case 완료: count={}", responses.size());
+        return responses;
     }
     
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public Category createCategory(Category category) {
+    public CategoryResponse createCategory(Category category) {
         log.info("[Application/Service] CategoryService.createCategory() - Use Case 시작: name={}", category.getName());
         
         // 이름 중복 체크
@@ -78,10 +84,11 @@ public class CategoryService {
                 });
         
         Category saved = categoryRepositoryPort.save(category);
+        CategoryResponse response = CategoryResponse.from(saved);
         
         log.info("[Application/Service] CategoryService.createCategory() - Use Case 완료: id={}, name={}", 
                 saved.getId(), saved.getName());
-        return saved;
+        return response;
     }
     
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
@@ -180,4 +187,3 @@ public class CategoryService {
         return response;
     }
 }
-

@@ -109,7 +109,7 @@ public class SwaggerConfig {
                 .displayName("Admin APIs")
                 .pathsToMatch(apiPaths)
                 .packagesToScan(
-                    "com.aiwellness.common.controller",  // common 모듈의 공통 API (Auth, AppCode 등)
+                    "com.aiwellness.common.controller",  // common 모듈의 공통 API (Auth 등)
                     "com.aiwellness.admin.adapter.web"  // admin-server의 web 패키지 스캔
                 )
                 .build();
@@ -123,7 +123,7 @@ public class SwaggerConfig {
                 .displayName("Manager APIs")
                 .pathsToMatch(swaggerPathConfig.getApiPathArray())
                 .packagesToScan(
-                    "com.aiwellness.common.controller",  // common 모듈의 공통 API (Auth, AppCode 등)
+                    "com.aiwellness.common.controller",  // common 모듈의 공통 API (Auth 등)
                     "com.aiwellness.manager.adapter.web"  // manager-server의 web 패키지 스캔
                 )
                 .build();
@@ -137,7 +137,7 @@ public class SwaggerConfig {
                 .displayName("Customer APIs")
                 .pathsToMatch(swaggerPathConfig.getApiPathArray())
                 .packagesToScan(
-                    "com.aiwellness.common.controller",  // common 모듈의 공통 API (Auth, AppCode 등)
+                    "com.aiwellness.common.controller",  // common 모듈의 공통 API (Auth 등)
                     "com.aiwellness.customer.adapter.web"  // customer-server의 web 패키지 스캔
                 )
                 .build();

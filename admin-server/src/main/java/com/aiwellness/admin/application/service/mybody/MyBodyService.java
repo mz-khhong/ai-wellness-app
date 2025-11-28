@@ -4,7 +4,7 @@ import com.aiwellness.admin.adapter.web.mybody.dto.response.MyBodyResponse;
 import com.aiwellness.admin.domain.model.mybody.MyBody;
 import com.aiwellness.admin.domain.port.mybody.MyBodyRepositoryPort;
 import com.aiwellness.admin.exception.AdminBusinessException;
-import com.aiwellness.admin.exception.AdminErrorCode;
+import com.aiwellness.admin.domain.code.admin.AdminCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class MyBodyService {
         log.debug("[Application/Service] MyBodyService.getMyBody() - Domain Port 호출: MyBodyRepositoryPort.findById()");
         
         MyBody myBody = myBodyRepositoryPort.findById(id)
-                .orElseThrow(() -> new AdminBusinessException(AdminErrorCode.ADMIN_NOT_FOUND));
+                .orElseThrow(() -> new AdminBusinessException(AdminCode.ADMIN_NOT_FOUND));
         
         log.debug("[Application/Service] MyBodyService.getMyBody() - Domain Port 응답: MyBody(id={}, customerId={})", 
                 myBody.getId(), myBody.getCustomerId());
@@ -62,7 +62,7 @@ public class MyBodyService {
         log.debug("[Application/Service] MyBodyService.getMyBodyByCustomerId() - Domain Port 호출: MyBodyRepositoryPort.findByCustomerId()");
         
         MyBody myBody = myBodyRepositoryPort.findByCustomerId(customerId)
-                .orElseThrow(() -> new AdminBusinessException(AdminErrorCode.ADMIN_NOT_FOUND));
+                .orElseThrow(() -> new AdminBusinessException(AdminCode.ADMIN_NOT_FOUND));
         
         log.debug("[Application/Service] MyBodyService.getMyBodyByCustomerId() - Domain Port 응답: MyBody(id={}, customerId={})", 
                 myBody.getId(), myBody.getCustomerId());

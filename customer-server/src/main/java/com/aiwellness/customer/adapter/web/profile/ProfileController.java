@@ -7,7 +7,6 @@ import com.aiwellness.common.support.ApiResponseGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
  *  2025. 11. 18.    메가존 시스템            최초 생성
  * </pre>
  */
-@Slf4j
 @RestController
 @RequestMapping("/api/profile")
 @RequiredArgsConstructor
@@ -44,19 +42,13 @@ public class ProfileController {
     @GetMapping("/{id}")
     @Operation(summary = "프로필 조회", description = "ID로 프로필 정보를 조회합니다.")
     public ApiResponseWellness<ProfileResponse> getProfile(@PathVariable Long id) {
-        log.info("[Adapter/Web] ProfileController.getProfile() - HTTP 요청: GET /api/profile/{}", id);
-        ApiResponseWellness<ProfileResponse> response = ApiResponseGenerator.success(profileService.getProfile(id));
-        log.info("[Adapter/Web] ProfileController.getProfile() - HTTP 응답: 200 OK");
-        return response;
+        return ApiResponseGenerator.success(profileService.getProfile(id));
     }
     
     @GetMapping("/customer/{customerId}")
     @Operation(summary = "고객별 프로필 조회", description = "고객 ID로 프로필 정보를 조회합니다.")
     public ApiResponseWellness<ProfileResponse> getProfileByCustomerId(@PathVariable Long customerId) {
-        log.info("[Adapter/Web] ProfileController.getProfileByCustomerId() - HTTP 요청: GET /api/profile/customer/{}", customerId);
-        ApiResponseWellness<ProfileResponse> response = ApiResponseGenerator.success(profileService.getProfileByCustomerId(customerId));
-        log.info("[Adapter/Web] ProfileController.getProfileByCustomerId() - HTTP 응답: 200 OK");
-        return response;
+        return ApiResponseGenerator.success(profileService.getProfileByCustomerId(customerId));
     }
 }
 

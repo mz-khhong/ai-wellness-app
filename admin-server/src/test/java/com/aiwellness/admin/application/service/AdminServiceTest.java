@@ -6,7 +6,7 @@ import com.aiwellness.admin.application.service.admin.AdminService;
 import com.aiwellness.admin.domain.model.admin.Admin;
 import com.aiwellness.admin.domain.port.admin.AdminRepositoryPort;
 import com.aiwellness.admin.exception.AdminBusinessException;
-import com.aiwellness.admin.exception.AdminErrorCode;
+import com.aiwellness.admin.domain.code.admin.AdminCode;
 import com.aiwellness.admin.fixture.MockData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,7 +96,7 @@ class AdminServiceTest {
                 .isInstanceOf(AdminBusinessException.class)
                 .satisfies(exception -> {
                     AdminBusinessException adminException = (AdminBusinessException) exception;
-                    assertThat(adminException.getAdminErrorCode()).isEqualTo(AdminErrorCode.ADMIN_NOT_FOUND);
+                    assertThat(adminException.getAdminCode()).isEqualTo(AdminCode.ADMIN_NOT_FOUND);
                 });
     }
 
@@ -142,7 +142,7 @@ class AdminServiceTest {
                 .isInstanceOf(AdminBusinessException.class)
                 .satisfies(exception -> {
                     AdminBusinessException adminException = (AdminBusinessException) exception;
-                    assertThat(adminException.getAdminErrorCode()).isEqualTo(AdminErrorCode.ADMIN_EMAIL_DUPLICATE);
+                    assertThat(adminException.getAdminCode()).isEqualTo(AdminCode.ADMIN_EMAIL_DUPLICATE);
                 });
     }
     

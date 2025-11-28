@@ -50,7 +50,7 @@ logging:
 swagger:
   use-default-pattern: false  # 기본 패턴 사용 안 함
   api-paths:
-    # Common 모듈의 공통 API 경로(/api/v1/auth/**, /api/v1/appCode/**)는
+    # Common 모듈의 공통 API 경로(/api/v1/auth/**)는
     # SwaggerPathConfig에서 자동으로 추가되므로 여기에 명시할 필요가 없습니다.
     - /api/v1/admins/**
     - /api/v1/mybody/**
@@ -60,6 +60,12 @@ swagger:
     servers:
       - url: http://localhost:8080
         description: Admin Server
+
+# 외부 SSO 연계 API 설정 (admin-server 전용)
+external:
+  sso:
+    api:
+      url: ${EXTERNAL_SSO_API_URL:}  # 외부 SSO 연계 API 서버 URL (예: https://api.external-sso.com)
 
 management:
   endpoints:

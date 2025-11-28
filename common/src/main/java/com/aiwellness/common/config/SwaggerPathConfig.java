@@ -76,7 +76,6 @@ public class SwaggerPathConfig {
      */
     private static final String[] COMMON_API_PATHS = {
         "/api/v1/auth/**",      // AuthController
-        "/api/v1/appCode/**",   // AppCodeController
         "/api/v1/messages/**"   // MessageEventController
     };
     

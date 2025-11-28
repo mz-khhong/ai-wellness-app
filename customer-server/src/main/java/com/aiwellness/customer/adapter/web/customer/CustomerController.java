@@ -11,12 +11,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
@@ -27,24 +25,18 @@ public class CustomerController {
     @GetMapping("/{id}")
     @Operation(summary = "고객 조회", description = "ID로 고객 정보를 조회합니다.")
     public ApiResponseWellness<CustomerResponse> getCustomer(@PathVariable Long id) {
-        log.info("[Adapter/Web] CustomerController.getCustomer() - HTTP 요청: GET /api/v1/customers/{}", id);
-        ApiResponseWellness<CustomerResponse> response = ApiResponseGenerator.success(customerService.getCustomer(id));
-        log.info("[Adapter/Web] CustomerController.getCustomer() - HTTP 응답: 200 OK");
-        return response;
+        return ApiResponseGenerator.success(customerService.getCustomer(id));
     }
 
     @PostMapping
     @Operation(summary = "고객 생성", description = "새로운 고객을 생성합니다.")
     public ResponseEntity<ApiResponseWellness<CustomerResponse>> createCustomer(
             @Valid @RequestBody CustomerCreateRequest request) {
-        log.info("[Adapter/Web] CustomerController.createCustomer() - HTTP 요청: POST /api/v1/customers, email={}", request.getEmail());
-        ResponseEntity<ApiResponseWellness<CustomerResponse>> response = ApiResponseGenerator.success(
+        return ApiResponseGenerator.success(
                 CustomerResponseCode.CUSTOMER_CREATE_SUCCESS, 
                 customerService.createCustomer(request), 
                 HttpStatus.CREATED
         );
-        log.info("[Adapter/Web] CustomerController.createCustomer() - HTTP 응답: 201 CREATED");
-        return response;
     }
 
     @PutMapping("/{id}")
@@ -52,21 +44,16 @@ public class CustomerController {
     public ApiResponseWellness<CustomerResponse> updateCustomer(
             @PathVariable Long id,
             @Valid @RequestBody CustomerUpdateRequest request) {
-        log.info("[Adapter/Web] CustomerController.updateCustomer() - HTTP 요청: PUT /api/v1/customers/{}", id);
-        ApiResponseWellness<CustomerResponse> response = ApiResponseGenerator.success(
+        return ApiResponseGenerator.success(
                 CustomerResponseCode.CUSTOMER_UPDATE_SUCCESS, 
                 customerService.updateCustomer(id, request)
         );
-        log.info("[Adapter/Web] CustomerController.updateCustomer() - HTTP 응답: 200 OK");
-        return response;
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "고객 삭제", description = "고객을 삭제합니다.")
     public ApiResponseWellness<Void> deleteCustomer(@PathVariable Long id) {
-        log.info("[Adapter/Web] CustomerController.deleteCustomer() - HTTP 요청: DELETE /api/v1/customers/{}", id);
         customerService.deleteCustomer(id);
-        log.info("[Adapter/Web] CustomerController.deleteCustomer() - HTTP 응답: 200 OK");
         return ApiResponseGenerator.success();
     }
 }

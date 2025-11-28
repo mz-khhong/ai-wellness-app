@@ -9,7 +9,6 @@ import com.aiwellness.common.support.ApiResponseGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
  *  2025. 11. 18.    메가존 시스템            최초 생성
  * </pre>
  */
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/mybody")
 @RequiredArgsConstructor
@@ -48,10 +46,6 @@ public class MyBodyController {
     public ApiResponseWellness<MyBodyResponse> getMyBody(
             @PathVariable Long id,
             @AuthenticatedUser CurrentUser user) {
-        log.info("[Adapter/Web] MyBodyController.getMyBody() - HTTP 요청 수신: GET /api/mybody/{}, userId={}, email={}", 
-                id, user.getUserId(), user.getEmail());
-        log.debug("[Adapter/Web] MyBodyController.getMyBody() - 파라미터: id={}, userId={}, facilityGroupId={}", 
-                id, user.getUserId(), user.getFacilityGroupId());
         return ApiResponseGenerator.success(myBodyService.getMyBody(id));
     }
     
@@ -60,10 +54,6 @@ public class MyBodyController {
     public ApiResponseWellness<MyBodyResponse> getMyBodyByCustomerId(
             @PathVariable Long customerId,
             @AuthenticatedUser CurrentUser user) {
-        log.info("[Adapter/Web] MyBodyController.getMyBodyByCustomerId() - HTTP 요청 수신: GET /api/mybody/customer/{}, userId={}, email={}", 
-                customerId, user.getUserId(), user.getEmail());
-        log.debug("[Adapter/Web] MyBodyController.getMyBodyByCustomerId() - 파라미터: customerId={}, userId={}, facilityGroupId={}", 
-                customerId, user.getUserId(), user.getFacilityGroupId());
         return ApiResponseGenerator.success(myBodyService.getMyBodyByCustomerId(customerId));
     }
 }
