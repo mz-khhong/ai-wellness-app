@@ -5,6 +5,7 @@ import com.aiwellness.admin.adapter.infrastructure.external.sso.dto.ExternalApiR
 import com.aiwellness.admin.adapter.infrastructure.external.sso.dto.ExternalApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Repository;
  * <p>
  * SSO 토큰은 Feign Client 설정(ExternalSsoApiFeignConfig)에서 자동으로 주입되므로,
  * 이 Adapter에서는 직접 토큰을 관리할 필요가 없습니다.
+ * <p>
+ * external.sso.api.url이 설정되어 있고 비어있지 않을 때만 생성됩니다.
  *
  * @author 메가존 시스템
  * @version 1.0
@@ -34,6 +37,7 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
+@ConditionalOnExpression("!'${external.sso.api.url:}'.isEmpty()")
 public class ExternalSsoApiAdapter implements ExternalSsoApiPort {
     
     private final ExternalSsoApiClient externalSsoApiClient;

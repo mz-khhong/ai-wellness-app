@@ -6,6 +6,7 @@ import feign.RequestTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * com.aiwellness.admin.adapter.infrastructure.external.sso
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.Bean;
  * @since 2025. 11. 20.
  */
 @Slf4j
+@Configuration
 @RequiredArgsConstructor
 public class ExternalSsoApiFeignConfig {
     

@@ -5,6 +5,7 @@ import com.aiwellness.admin.adapter.infrastructure.external.sso.dto.ExternalApiR
 import com.aiwellness.admin.adapter.infrastructure.external.sso.dto.ExternalApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 외부 SSO 연계 API 호출을 위한 Application Service
  * <p>
  * 헥사고날 아키텍처 원칙에 따라 Domain Port를 통해 외부 시스템과 통신합니다.
+ * <p>
  *
  * @author 메가존 시스템
  * @version 1.0
@@ -34,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(isolation = Isolation.READ_COMMITTED)
+@ConditionalOnExpression("!'${external.sso.api.url:}'.isEmpty()")
 public class ExternalApiService {
     
     private final ExternalSsoApiPort externalSsoApiPort;

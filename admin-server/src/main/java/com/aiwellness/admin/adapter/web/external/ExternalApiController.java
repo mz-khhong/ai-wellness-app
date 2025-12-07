@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * ExternalApiController
  * <p>
  * 외부 SSO 연계 API 호출을 위한 REST Controller
+ * <p>
  *
  * @author 메가존 시스템
  * @version 1.0
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/external")
 @RequiredArgsConstructor
 @Tag(name = "External API", description = "외부 SSO 연계 API")
+@ConditionalOnExpression("!'${external.sso.api.url:}'.isEmpty()")
 public class ExternalApiController {
     
     private final ExternalApiService externalApiService;

@@ -2,6 +2,7 @@ package com.aiwellness.admin.adapter.infrastructure.external.sso;
 
 import com.aiwellness.admin.adapter.infrastructure.external.sso.dto.ExternalApiRequest;
 import com.aiwellness.admin.adapter.infrastructure.external.sso.dto.ExternalApiResponse;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
  * 외부 SSO 연계 API 호출을 위한 Feign Client
  * <p>
  * SSO 토큰은 ExternalSsoApiFeignConfig에서 자동으로 주입됩니다.
+ * <p>
+ * external.sso.api.url이 설정되어 있고 비어있지 않을 때만 빈으로 등록됩니다.
  *
  * @author 메가존 시스템
  * @version 1.0
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
     url = "${external.sso.api.url:}",
     configuration = ExternalSsoApiFeignConfig.class
 )
+@ConditionalOnExpression("!'${external.sso.api.url:}'.isEmpty()")
 public interface ExternalSsoApiClient {
     
     /**

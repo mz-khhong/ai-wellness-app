@@ -33,7 +33,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @Slf4j
 @Configuration
-@EnableFeignClients(basePackages = "com.aiwellness.**.adapter.infrastructure.client")
+@EnableFeignClients(basePackages = {
+    "com.aiwellness.**.adapter.infrastructure.client",
+    "com.aiwellness.**.adapter.infrastructure.external"
+})
 public class FeignConfig {
     
     /**
